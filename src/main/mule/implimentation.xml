@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd">
+	<http:listener-config name="HTTP_Listener_config1" doc:name="HTTP Listener config" doc:id="27b8661c-a2de-4403-8679-33e68a1e44fb" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<apikit:config outboundHeadersMapName="outboundHeadersMapName" httpStatusVarName="httpStatus" doc:name="Router" doc:id="bc94b165-dc21-43ed-b924-5465c5430541" name="Router" />
+	<sub-flow name="implimentationSub_Flow" doc:id="8448bde5-cd9e-4e18-9f4d-329f202c1cae" >
+		<logger level="INFO" doc:name="Flow Start" doc:id="5d75a658-7b3f-4a7f-bff3-b7df9dad4297" message="Flow Start"/>
+		<validation:matches-regex doc:name="Matches regex" doc:id="dfc95205-43b8-4c8d-8539-a680a6a06e3f" value="#[attributes.queryParams.phoneNumber]" regex="^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$" message="Verify Valid Number" config-ref="Validation_Config"/>
+		<http:request method="GET" doc:name="Request" doc:id="61813c3c-843d-43fe-a6fa-dd264a6942f0" path="/validate" config-ref="HTTP_Request_configuration">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"" : "",
+	"Key-2" : "Value",
+	"Key" : "Value"
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="28285f10-08f2-403b-b4e5-90750e9d7269" />
+	</sub-flow>
+</mule>
